@@ -1,9 +1,7 @@
 package com.company;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 public class Main {
     static ArrayList<String> namesOfMen = new ArrayList<>(), namesOfWomen = new ArrayList<>();

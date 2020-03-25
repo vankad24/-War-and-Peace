@@ -1,4 +1,3 @@
-package com.company;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +33,13 @@ public class Main {
                 namesOfWomen.add(name);
         }
         System.out.println("men "+namesOfMen.size()+" women "+ namesOfWomen.size());
+        TreeMap<String,Integer> topChars =new TreeMap<>();
+        String countableChars ="?.!-,:;['*\"";
+        for (int i = 0; i < builder.length(); i++) {
+            if (countableChars.contains(String.valueOf(builder.charAt(i))))writeInMap(topChars,String.valueOf(builder.charAt(i)));
+        }
+        topChars.put("\"",topChars.get("\"")/2);
+
         int index = builder.indexOf("...");
         while (index != -1) {
             builder.delete(index, index + 4);
@@ -95,6 +101,14 @@ public class Main {
         System.out.println("\nТоп редких имен:");
         printTopOf(topOfMen,true);
 
+        System.out.println("\nТоп символов:");
+        keys = new ArrayList<>(topChars.keySet());
+        val = new ArrayList<>(topChars.values());
+        top = topTen(keys.toArray(new String[0]),val.toArray(new Integer[0]),false,false);
+        for (int i = 0; i < top.length; i++) {
+           String s = top[i].equals("\"")||top[i].equals("[")?"Пар символов «":"Символов «";
+           System.out.println(i+1+". "+s+top[i]+"» - "+topChars.get(top[i]));
+        }
         System.out.println("\n"+(new Date().getTime()-start.getTime())+" ms");
 
     }
@@ -123,8 +137,9 @@ public class Main {
             }
         }
     }
-    static String[] topTen(String[] keys, Integer[] values){return topTen(keys,values,false);}
-    static String[] topTen(String[] keys, Integer[] values, boolean decrease){
+    static String[] topTen(String[] keys, Integer[] values){return topTen(keys,values,false, true);}
+    static String[] topTen(String[] keys, Integer[] values, boolean decrease){return topTen(keys,values,decrease, true);}
+    static String[] topTen(String[] keys, Integer[] values, boolean decrease, boolean limit){
         for (int i = 0; i <values.length ; i++) {
             for (int j = i; j<values.length ; j++) {
                 int num = decrease?values[j].compareTo(values[i]):values[i].compareTo(values[j]);
@@ -138,7 +153,8 @@ public class Main {
                 }
             }
         }
-        return Arrays.copyOf(keys,10);
+        if (limit)return Arrays.copyOf(keys,10);
+        return Arrays.copyOf(keys,keys.length);
     }
     static  void writeInMap(TreeMap<String,TreeMap<String,Integer>> map, String key1, String key2){
         if (map.containsKey(key1)) {
